@@ -20,9 +20,6 @@ namespace Ui.WebAssembly
             {
                 client.BaseAddress = new Uri("https://localhost:44326/");
             });
-
-            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("api_gateway"));
-
             await builder.Build().RunAsync();
         }
     }
