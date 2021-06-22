@@ -1,7 +1,7 @@
 ﻿@page "/shipments"
 @using Common
 @using Ui.WebAssembly.Services
-@inject FooHttpClient Http
+@inject IHttpClientFactory _httpClientFactory
 
 <h1>Shipments</h1>
 
@@ -39,6 +39,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetShipmentsAsync();
+        forecasts = await _httpClientFactory.CreateClient("api_gateway").GetFromJsonAsync<IEnumerable<WeatherForecast>>("shipment/api/WeatherForecast");
     }
 }
