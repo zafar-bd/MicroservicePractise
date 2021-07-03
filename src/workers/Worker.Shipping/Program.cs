@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using MassTransit;
 
-namespace Worker.Shipping
+namespace Worker.Order
 {
     public class Program
     {
@@ -18,7 +20,7 @@ namespace Worker.Shipping
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
+
                 });
     }
 }

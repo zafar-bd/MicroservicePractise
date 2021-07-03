@@ -6,7 +6,7 @@ namespace Common.Events
     {
         public int Id { get; set; }
         public string CustomerName { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
     public class OrderItem
     {

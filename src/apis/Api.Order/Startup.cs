@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MassTransit;
+using Worker.Order;
 
 namespace Api.Order
 {
@@ -31,6 +33,18 @@ namespace Api.Order
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api.Order", Version = "v1" });
+            });
+
+            services.AddMassTransit(mt =>
+            {
+                mt.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq://localhost", crd =>
+                    {
+                        crd.Username("guest");
+                        crd.Password("guest");
+                    });
+                });
             });
         }
 

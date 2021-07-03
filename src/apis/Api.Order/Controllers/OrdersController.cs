@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Api.Order.Dtos;
 using Common.Events;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace Api.Order.Controllers
 {
@@ -11,13 +13,15 @@ namespace Api.Order.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IBus _messageBus;
+        private readonly ILogger<OrdersController> _logger;
 
-        public OrdersController(IBus messageBus)
+        public OrdersController(IBus messageBus, ILogger<OrdersController> logger)
         {
             _messageBus = messageBus;
+            _logger = logger;
         }
         [HttpPost]
-        public async Task<IActionResult> Order([FromBody] OrderDto dto1)
+        public async Task<IActionResult> Order()
         {
             OrderDto dto = new()
             {
@@ -44,7 +48,18 @@ namespace Api.Order.Controllers
                 });
             });
 
-            await _messageBus.Publish(orderCreatedEvent);
+            OrderDto dto2 = new()
+            {
+                Id = 2,
+                CustomerName = "customer 2",
+                OrderItems = new()
+                {
+                    new() { Id = 1, ProductName = "product 2", Qty = 10 }
+                }
+            };
+            await _messageBus.Publish<OrderCreated>(orderCreatedEvent);
+
+            _logger.LogInformation($"{nameof(OrderCreated)} event sent at {DateTime.Now}");
 
             return Created("", "");
         }
